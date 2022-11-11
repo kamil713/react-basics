@@ -18,7 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 317px;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .info {
