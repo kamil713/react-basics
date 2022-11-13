@@ -4,5 +4,28 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+nav {
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  background-color: #f55a5a;
+  color: white;
+}
+
+nav > svg {
+  width: 24px;
+  height: 24px;
+}
+
+nav > h1 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  letter-spacing: -0.075em;
 }
