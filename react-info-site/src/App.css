@@ -118,7 +118,7 @@ main {
   color: #2b283a;
 }
 
-.main.dark {
+main.dark {
   background-image: url("assets/images/react-icon-dark.png");
   background-color: #282d35;
   color: white;
