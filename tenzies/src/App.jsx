@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import Die from "./components/Die";
 import { nanoid } from "nanoid";
 import "./App.css";
@@ -24,7 +24,7 @@ function App() {
   }
 
   const diceElements = dice.map((die) => (
-    <Die key={die.id} value={die.value} />
+    <Die key={die.id} value={die.value} isHeld={die.isHeld}/>
   ));
 
   return (
@@ -37,4 +37,4 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(<App />);
