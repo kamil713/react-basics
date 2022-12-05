@@ -4,11 +4,13 @@ import Die from "./components/Die";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
 import "./App.css";
+import Scoreboard from "./components/Scoreboard";
 
 function App() {
   const [dice, setDice] = useState(allNewDice());
   const [tenzies, setTenzies] = useState(false);
   const [rolls, setRolls] = useState(0);
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     const allHeld = dice.every((die) => die.isHeld);
@@ -77,9 +79,10 @@ function App() {
       </p>
       <div className="stats-container">
         <p className="stats-container--rolls">Rolls: {rolls}</p>
-        <p className="stats-container--timer">Timer: 5</p>
+        <p className="stats-container--timer">Timer: {time}</p>
       </div>
       <div className="dice-container">{diceElements}</div>
+      <Scoreboard bestRolls={rolls} bestTime={time} />
       <button className="roll-dice" onClick={rollDice}>
         {tenzies ? "New Game" : "Roll"}
       </button>
