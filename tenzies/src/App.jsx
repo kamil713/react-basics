@@ -8,6 +8,7 @@ import "./App.css";
 function App() {
   const [dice, setDice] = useState(allNewDice());
   const [tenzies, setTenzies] = useState(false);
+  const [rolls, setRolls] = useState(0);
 
   useEffect(() => {
     const allHeld = dice.every((die) => die.isHeld);
@@ -41,7 +42,9 @@ function App() {
           return die.isHeld ? die : generateNewDie();
         })
       );
+      setRolls(oldRolls => oldRolls + 1)
     } else {
+      setRolls(0);
       setTenzies(false);
       setDice(allNewDice());
     }
@@ -72,6 +75,10 @@ function App() {
         Roll until all dice are the same. Click each die to freeze it at its
         current value between rolls.
       </p>
+      <div className="stats-container">
+        <p className="stats-container--rolls">Rolls: {rolls}</p>
+        <p className="stats-container--timer">Timer: 5</p>
+      </div>
       <div className="dice-container">{diceElements}</div>
       <button className="roll-dice" onClick={rollDice}>
         {tenzies ? "New Game" : "Roll"}
