@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import Die from "./components/Die";
+import Scoreboard from "./components/Scoreboard";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
 import "./App.css";
-import Scoreboard from "./components/Scoreboard";
 
 function App() {
   const [dice, setDice] = useState(allNewDice());
   const [tenzies, setTenzies] = useState(false);
   const [rolls, setRolls] = useState(0);
+  const [bestRolls, setBestRolls] = useState(
+    JSON.parse(localStorage.getItem("bestRolls")) || 0
+  );
   const [time, setTime] = useState(0);
+  const [bestTime, setBestTime] = useState(
+    JSON.parse(localStorage.getItem("bestTime")) || 0
+  );
 
   useEffect(() => {
     const allHeld = dice.every((die) => die.isHeld);
@@ -18,6 +24,8 @@ function App() {
     const allSameValue = dice.every((die) => die.value === firstValue);
     if (allHeld && allSameValue) {
       setTenzies(true);
+
+      setRecords();
     }
   }, [dice]);
 
@@ -44,11 +52,12 @@ function App() {
           return die.isHeld ? die : generateNewDie();
         })
       );
-      setRolls(oldRolls => oldRolls + 1)
+      setRolls((oldRolls) => oldRolls + 1);
     } else {
-      setRolls(0);
       setTenzies(false);
       setDice(allNewDice());
+      setRolls(0);
+      setTime(0);
     }
   }
 
@@ -59,6 +68,37 @@ function App() {
       })
     );
   }
+
+  function setRecords() {
+    if (!bestRolls || rolls < bestRolls) {
+      setBestRolls(rolls);
+    }
+
+    const timeFloored = Math.floor(time / 10);
+    if (!bestTime || timeFloored < bestTime) {
+      setBestTime(timeFloored);
+    }
+  }
+
+  useEffect(() => {
+    localStorage.setItem("bestRolls", JSON.stringify(bestRolls));
+  }, [bestRolls]);
+
+  useEffect(() => {
+    localStorage.setItem("bestTime", JSON.stringify(bestTime));
+  }, [bestTime]);
+
+  useEffect(() => {
+    let interval = null;
+    if (!tenzies) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [tenzies]);
 
   const diceElements = dice.map((die) => (
     <Die
@@ -79,10 +119,13 @@ function App() {
       </p>
       <div className="stats-container">
         <p className="stats-container--rolls">Rolls: {rolls}</p>
-        <p className="stats-container--timer">Timer: {time}</p>
+        <p className="stats-container--timer">
+          Timer: {("0" + Math.floor((time / 1000) % 60)).slice(-2)}: 
+          {("0" + ((time / 10) % 1000)).slice(-2)}
+        </p>
       </div>
       <div className="dice-container">{diceElements}</div>
-      <Scoreboard bestRolls={rolls} bestTime={time} />
+      <Scoreboard bestRolls={bestRolls} bestTime={bestTime} />
       <button className="roll-dice" onClick={rollDice}>
         {tenzies ? "New Game" : "Roll"}
       </button>
