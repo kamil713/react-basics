@@ -7,7 +7,7 @@ export default function Scoreboard(props) {
             </div>
             <div className="time-best">
                 <p>Best time</p>
-                <p>{props.bestTime}</p>
+                <p>{props.bestTime / 100}s</p>
             </div>
         </div>
     )
