@@ -7,10 +7,17 @@
 }
 
 body,
-main {
+main,
+.first-screen,
+.second-screen {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.first-screen,
+.second-screen {
+    flex-direction: column;
 }
 
 body {
@@ -42,11 +49,14 @@ body::after {
     background-image: url("./assets/blobs/blobTR.svg");
 }
 
-main {
-  flex-direction: column;
-}
+.line {
+    margin: 18px 0;
+    height: 1px;
+    background-color: #DBDEF0;
+    border-radius: 1px;
+  }
 
-/* components */
+/* button component */
 
 .prime-button {
   margin-top: 1rem;
@@ -79,6 +89,19 @@ main {
 
 .description {
   margin-top: 0.5rem;
+  width: 80%;
+  text-align: center;
   font-size: 0.9rem;
   color: #293264;
+}
+
+/* second screen */
+.question-container {
+    width: 80%;
+}
+
+.question-text {
+    font-family: "Karla", sans-serif;
+    font-size: 1.2rem;
+    color: #293264;
 }
