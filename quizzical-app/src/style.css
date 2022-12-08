@@ -6,77 +6,66 @@
   padding: 0;
 }
 
-body,
+body {
+  height: calc(100vh - 1px);
+  font-family: "Inter", sans-serif;
+  background-color: #f5f7fb;
+}
+
 main,
 .first-screen,
-.second-screen {
+.second-screen,
+.questions-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .first-screen,
-.second-screen {
-    flex-direction: column;
+.second-screen,
+.questions-container {
+  flex-direction: column;
 }
 
-body {
-  background-color: #f5f7fb;
-  font-family: "Inter", sans-serif;
-  min-height: calc(100vh - 1px);
+main {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
   overflow: hidden;
 }
 
-body::before, body::after {
-    content: "";
-    position: absolute;
-    height: 25%;
-    width: 25%;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+main::before,
+main::after {
+  content: "";
+  position: absolute;
+  height: 25%;
+  width: 25%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
-body::before {
-    left: -10%;
-    bottom: -10%;
-    background-image: url("./assets/blobs/blobBL.svg");
+main::before {
+  left: -10%;
+  bottom: -10%;
+  background-image: url("./assets/blobs/blobBL.svg");
 }
 
-body::after {
-    right: -10%;
-    top: -10%;
-    background-image: url("./assets/blobs/blobTR.svg");
+main::after {
+  right: -10%;
+  top: -10%;
+  background-image: url("./assets/blobs/blobTR.svg");
 }
 
 .line {
-    margin: 18px 0;
-    height: 1px;
-    background-color: #DBDEF0;
-    border-radius: 1px;
-  }
-
-/* button component */
-
-.prime-button {
-  margin-top: 1rem;
-  width: 140px;
-  height: 35px;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
-  font-family: "Inter", sans-serif;
-  font-weight: 500;
-  background-color: #4d5b9e;
-  color: white;
+  margin: 18px 0;
+  height: 1px;
+  background-color: #dbdef0;
+  border-radius: 1px;
 }
 
-.prime-button:focus {
-  outline: none;
-}
-
-.prime-button:active {
-  box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+button {
+  cursor: pointer;
 }
 
 /* first screen */
@@ -96,12 +85,103 @@ body::after {
 }
 
 /* second screen */
+
+.second-screen {
+  width: 80%;
+  max-width: 768px;
+}
+
+/* weird */
+/* .questions-container {
+  height: 100%;
+  overflow-y: auto;
+} */
+
 .question-container {
-    width: 80%;
+  width: 100%;
 }
 
 .question-text {
-    font-family: "Karla", sans-serif;
-    font-size: 1.2rem;
-    color: #293264;
+  font-family: "Karla", sans-serif;
+  font-size: 0.9rem;
+  color: #293264;
+}
+
+.answer-container {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template: 1fr 1fr / 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.answer-button {
+  padding: 0.25rem 0.75rem;
+  border-radius: 10px;
+  border: solid 1px #4d5b9e;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  background-color: white;
+  color: #293264;
+}
+
+.answer-button:hover {
+  border: none;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+  background-color: #d6dbf5;
+}
+
+/* button component */
+
+.prime-button {
+  margin-top: 0.5rem;
+  width: 120px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  background-color: #4d5b9e;
+  color: white;
+}
+
+.prime-button:focus {
+  outline: none;
+}
+
+.prime-button:active {
+  box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}
+
+@media screen and (min-width: 768px) {
+  .question-text {
+    font-size: 1rem;;
+  }
+  
+  .answer-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .answer-button {
+    padding: 0.25rem 1.25rem;
+    font-size: 0.8rem;
+  }
+
+  .answer-button:hover {
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
+  }
+
+  .prime-button {
+    margin-top: 1rem;
+    width: 140px;
+    height: 35px;
+    font-size: 0.9rem;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
+  }
 }
