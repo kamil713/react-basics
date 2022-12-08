@@ -1,6 +1,10 @@
 import Answer from "./Answer";
 
 export default function Question(props) {
+  const answerElements = props.answers.map((answer) => {
+    return <Answer answer={answer} />;
+  });
+
   return (
     <div className="question-container">
       {/* https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml */}
@@ -9,7 +13,7 @@ export default function Question(props) {
         className="question-text"
         dangerouslySetInnerHTML={{ __html: props.question }}
       ></h3>
-      <Answer />
+      <div className="answer-container">{answerElements}</div>
       <div className="line"></div>
     </div>
   );
