@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     async function getQuestions() {
       const res = await fetch(
-        "https://opentdb.com/api.php?amount=5&category=21&type=multiple"
+        "https://opentdb.com/api.php?amount=4&category=21&type=multiple"
       );
       const data = await res.json();
       console.log(data.results);
@@ -20,7 +20,14 @@ function App() {
   }, []);
 
   const questionElements = allQuestions.map((question) => {
-    return <Question key={nanoid()} question={question.question} />;
+    return (
+      <Question
+        key={nanoid()}
+        question={question.question}
+        answers={[...question.incorrect_answers, question.correct_answer].sort()}
+        correctAnswer={question.correct_answer}
+      />
+    );
   });
 
   return (
@@ -32,12 +39,17 @@ function App() {
             Since the biggest sporting event is currently taking place, try to
             answer some questions related to sports.
           </p>
-          <Button text="Start quiz" handleButton={() => setStart(prevState => !prevState)} />
+          <Button
+            text="Start quiz"
+            handleButton={() => setStart((prevState) => !prevState)}
+          />
         </div>
       ) : (
         <div className="second-screen">
+          <div className="questions-container">
           {questionElements}
           <Button text={"Check answers"} />
+          </div>
         </div>
       )}
     </main>
