@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Button from "./components/Button";
 import Question from "./components/Question";
 import { nanoid } from "nanoid";
 
@@ -14,7 +13,6 @@ function App() {
     setGame((prevState) => !prevState);
     setChecked(false); // (prevState) => !prevState
     setScore(0);
-    //
   }
 
   useEffect(() => {
@@ -109,18 +107,37 @@ function App() {
     );
   }
 
-  function isChecked(result) {
-    // if (result) {
-    //   // setChecked((prevState) => !prevState);
-    //   console.log("udalo sie");
-    // } else {
-    //   console.log("nie udalo sie");
-    // }
-  }
-
-  function handleResult(result) {
-    // setRefresh(prevState => !prevState)
-    // isChecked(result)
+  function checkAnswers() {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) => {
+        const checkedAnswers = question.answers.map((answer) => {
+          if (answer.isHeld && !answer.correct) {
+            return {
+              ...answer,
+              heldIncorrect: true,
+              checked: true,
+            };
+          } else if (answer.isHeld && answer.correct) {
+            setScore((prevScore) => prevScore + 1);
+            return {
+              ...answer,
+              heldCorrect: true,
+              checked: true,
+            };
+          } else {
+            return {
+              ...answer,
+              checked: true,
+            };
+          }
+        });
+        return {
+          ...question,
+          answers: checkedAnswers,
+        };
+      })
+    );
+    setChecked(true);
   }
 
   return (
@@ -132,27 +149,33 @@ function App() {
             Since the biggest sporting event is currently taking place, try to
             answer some questions related to sports.
           </p>
-          <Button
-            text="Start quiz"
-            handleButton={() => setStart((prevState) => !prevState)}
-          />
+          <button
+            className="prime-button"
+            onClick={() => setStart((prevState) => !prevState)}
+          >
+            Start quiz
+          </button>
         </div>
       ) : (
         <div className="second-screen">
           <div className="questions-container">
             {questionElements}
             {!checked ? (
-              <Button text={"Check answers"} handleButton={handleResult} />
+              <button className="prime-button" onClick={checkAnswers}>
+                Check answers
+              </button>
             ) : (
               <div className="result">
                 <p className="result-text">
-                  You scorred {score}/5 correct answers
+                  You scorred {score}/4 correct answers
                 </p>
-                <Button
-                  text={"Play again"}
-                  onStyle={true}
-                  handleButton={newGame}
-                />
+                <button
+                  className="prime-button"
+                  style={{ margin: "0" }}
+                  onClick={newGame}
+                >
+                  Play again
+                </button>
               </div>
             )}
           </div>
