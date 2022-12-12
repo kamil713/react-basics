@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 
 function App() {
   const [start, setStart] = useState(true);
-  const [allQuestions, setAllQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [game, setGame] = useState(false);
   const [score, setScore] = useState(0);
   const [checked, setChecked] = useState(false);
@@ -52,7 +52,7 @@ function App() {
         };
       });
 
-      setAllQuestions(newData);
+      setQuestions(newData);
     }
     getQuestions();
   }, [game]);
@@ -72,17 +72,42 @@ function App() {
     });
   }
 
-  const questionElements = allQuestions.map((question) => {
+  const questionElements = questions.map((question) => {
     return (
       <Question
         id={question.id}
         key={question.id}
         question={question.question}
         answers={question.answers}
-        //
+        runHold={runHold}
       />
     );
   });
+
+  function runHold(answerId, questionId) {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) => {
+        if (question.id === questionId) {
+          const answersList = question.answers.map((answer) => {
+            if (answer.id === answerId || answer.isHeld) {
+              return {
+                ...answer,
+                isHeld: !answer.isHeld,
+              };
+            } else {
+              return answer;
+            }
+          });
+          return {
+            ...question,
+            answers: answersList,
+          };
+        } else {
+          return question;
+        }
+      })
+    );
+  }
 
   function isChecked(result) {
     // if (result) {
