@@ -3,30 +3,33 @@ import Answer from "./Answer";
 import { nanoid } from "nanoid";
 
 export default function Question(props) {
+  // tu sie odswieza ale czemu? Rekoncylacja???
   const answerElements = props.answers.map((answer) => {
+    const id = nanoid()
     return (
       <Answer
-        id={nanoid()}
+        id={id}
+        key={id}
         answer={answer}
         clicked={false}
-        toggleCorrect={toggleCorrect}
+        updateAnswers={updateAnswers}
       />
     );
   });
 
   const [answers, setAnswers] = useState(answerElements);
-  console.log(answers);
 
-  function toggleCorrect(id) {
+  function updateAnswers(id) {
     setAnswers((oldAnswers) =>
       oldAnswers.map((answer) => {
         if (answer.props.id === id) {
           return (
             <Answer
               id={answer.props.id}
+              key={answer.props.id}
               answer={answer.props.answer}
               clicked={true}
-              toggleCorrect={toggleCorrect}
+              updateAnswers={updateAnswers}
             />
           );
         }
@@ -34,9 +37,10 @@ export default function Question(props) {
         return (
           <Answer
             id={answer.props.id}
+            key={answer.props.id}
             answer={answer.props.answer}
             clicked={false}
-            toggleCorrect={toggleCorrect}
+            updateAnswers={updateAnswers}
           />
         );
       })
