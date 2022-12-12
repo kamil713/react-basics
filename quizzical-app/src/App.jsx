@@ -5,10 +5,17 @@ import { nanoid } from "nanoid";
 
 function App() {
   const [start, setStart] = useState(true);
-  const [checked, setChecked] = useState(false);
-  const [game, setGame] = useState(false);
-  const [score, setScore] = useState(2);
   const [allQuestions, setAllQuestions] = useState([]);
+  const [game, setGame] = useState(false);
+  const [score, setScore] = useState(0);
+  const [checked, setChecked] = useState(false);
+
+  function newGame() {
+    setGame((prevState) => !prevState);
+    setChecked(false); // (prevState) => !prevState
+    setScore(0);
+    //
+  }
 
   useEffect(() => {
     async function getQuestions() {
@@ -16,11 +23,32 @@ function App() {
         "https://opentdb.com/api.php?amount=4&category=21&type=multiple"
       );
       const data = await res.json();
+      // "results": [
+      //   {
+      //       "category": "Sports",
+      //       "type": "multiple",
+      //       "difficulty": "medium",
+      //       "question": "Who was the British professional wrestler Shirley Crabtree better known as?",
+      //       "correct_answer": "Big Daddy",
+      //       "incorrect_answers": [
+      //           "Giant Haystacks",
+      //           "Kendo Nagasaki",
+      //           "Masambula"
+      //       ]
+      //   },
+      //   ...
+      // ]
 
       const newData = data.results.map((data) => {
         return {
-          ...data,
           id: nanoid(),
+          question: data.question,
+          correctAnswer: data.correct_answer,
+
+          answers: settingAnswers(
+            [...data.incorrect_answers, data.correct_answer].sort(), // pass shuffle array
+            data.correct_answer
+          ),
         };
       });
 
@@ -29,26 +57,32 @@ function App() {
     getQuestions();
   }, [game]);
 
+  function settingAnswers(listOfAnswers, correctAnswer) {
+    return listOfAnswers.map((answer) => {
+      return {
+        id: nanoid(),
+        isHeld: false,
+        answer: answer,
+        // Compare every answer with correctAnswer and set it to true if they are the same
+        correct: answer === correctAnswer ? true : false,
+        heldCorrect: false,
+        heldIncorrect: false,
+        checked: false,
+      };
+    });
+  }
+
   const questionElements = allQuestions.map((question) => {
     return (
       <Question
         id={question.id}
         key={question.id}
         question={question.question}
-        answers={[
-          ...question.incorrect_answers,
-          question.correct_answer,
-        ].sort()}
-        correctAnswer={question.correct_answer}
+        answers={question.answers}
+        //
       />
     );
   });
-
-
-  function newGame() {
-    setGame((prevState) => !prevState);
-    setChecked((prevState) => !prevState);
-  }
 
   function isChecked(result) {
     // if (result) {
