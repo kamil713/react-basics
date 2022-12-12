@@ -5,6 +5,9 @@ import { nanoid } from "nanoid";
 
 function App() {
   const [start, setStart] = useState(true);
+  const [checked, setChecked] = useState(false);
+  const [game, setGame] = useState(false);
+  const [score, setScore] = useState(2);
   const [allQuestions, setAllQuestions] = useState([]);
 
   useEffect(() => {
@@ -13,22 +16,53 @@ function App() {
         "https://opentdb.com/api.php?amount=4&category=21&type=multiple"
       );
       const data = await res.json();
-      console.log(data.results);
-      setAllQuestions(data.results);
+
+      const newData = data.results.map((data) => {
+        return {
+          ...data,
+          id: nanoid(),
+        };
+      });
+
+      setAllQuestions(newData);
     }
     getQuestions();
-  }, []);
+  }, [game]);
 
   const questionElements = allQuestions.map((question) => {
     return (
       <Question
-        key={nanoid()}
+        id={question.id}
+        key={question.id}
         question={question.question}
-        answers={[...question.incorrect_answers, question.correct_answer].sort()}
+        answers={[
+          ...question.incorrect_answers,
+          question.correct_answer,
+        ].sort()}
         correctAnswer={question.correct_answer}
       />
     );
   });
+
+
+  function newGame() {
+    setGame((prevState) => !prevState);
+    setChecked((prevState) => !prevState);
+  }
+
+  function isChecked(result) {
+    // if (result) {
+    //   // setChecked((prevState) => !prevState);
+    //   console.log("udalo sie");
+    // } else {
+    //   console.log("nie udalo sie");
+    // }
+  }
+
+  function handleResult(result) {
+    // setRefresh(prevState => !prevState)
+    // isChecked(result)
+  }
 
   return (
     <main>
@@ -47,8 +81,21 @@ function App() {
       ) : (
         <div className="second-screen">
           <div className="questions-container">
-          {questionElements}
-          <Button text={"Check answers"} />
+            {questionElements}
+            {!checked ? (
+              <Button text={"Check answers"} handleButton={handleResult} />
+            ) : (
+              <div className="result">
+                <p className="result-text">
+                  You scorred {score}/5 correct answers
+                </p>
+                <Button
+                  text={"Play again"}
+                  onStyle={true}
+                  handleButton={newGame}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
